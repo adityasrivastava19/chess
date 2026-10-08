@@ -1,0 +1,14 @@
+{
+  "name": "chess-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd wsbackend && npx tsc -b",
+    "build": "npm run build:frontend && npm run build:backend",
+    "start": "node wsbackend/dist/index.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd wsbackend && npm run dev"
+  }
+}
