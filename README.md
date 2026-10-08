@@ -33,27 +33,7 @@ A full-stack, real-time multiplayer chess web application built with React 19, T
 
 ---
 
-## Repository Structure
 
-```text
-chess/
-├── frontend/             # React 19 Vite Frontend Application
-│   ├── src/
-│   │   ├── component/   # ChessBoard, PieceIcons, Buttons
-│   │   ├── hooks/       # UseSocket hook
-│   │   ├── messages/    # Shared message constants
-│   │   └── pages/       # Landing & Game pages
-│   └── package.json
-├── wsbackend/            # Node.js WebSocket Backend Server
-│   ├── src/
-│   │   ├── Game.ts      # Match game state & move handler
-│   │   ├── Maneger.ts   # User queue & room manager
-│   │   ├── Stockfish.ts # Bot AI move generator
-│   │   └── index.ts     # Unified HTTP + WS server entry point
-│   └── package.json
-├── package.json          # Monorepo root scripts
-└── README.md
-```
 
 ---
 
