@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 
-const WS_URL = import.meta.env.VITE_WS_URL || "ws://localhost:8080";
+const getWsUrl = () => {
+  if (import.meta.env.VITE_WS_URL) {
+    return import.meta.env.VITE_WS_URL;
+  }
+  const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+  return `${protocol}//${window.location.host}/ws`;
+};
 
 export const UseSocket = () => {
   const [socket, setsocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(WS_URL);
+    const wsUrl = getWsUrl();
+    const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
-      console.log("Connected to WebSocket server:", WS_URL);
+      console.log("Connected to WebSocket server:", wsUrl);
       setsocket(ws);
     };
 

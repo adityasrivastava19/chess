@@ -42,9 +42,9 @@ return (
   </div>
 
 </div>
-          <div className="flex justify-center  mt-3">
+          <div className="flex justify-center mt-3">
              <div >
-            <Button variant="primary" size="lg" text="Play "  onClick={()=>{navi("/game")}}/>
+            <Button variant="primary" size="lg" text="Play online"  onClick={()=>{navi("/game")}}/>
            </div>
           </div>
           </div>

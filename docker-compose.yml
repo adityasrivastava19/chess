@@ -1,0 +1,12 @@
+services:
+  chess-app:
+    image: adityaraj2004/chess:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: always
+
+
+
