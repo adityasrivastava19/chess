@@ -39,29 +39,15 @@ export class Game {
             return;
         }
 
-        // validating and making the move 
+        // validating and making player's move 
         try {
             this.board.move(move);
         } catch (e) {
+            console.error("Invalid move attempted:", move, e);
             return;
         }
 
-        // checking if game is over
-        if (this.board.isGameOver()) {
-            const gameOverPayload = JSON.stringify({
-                type: GAME_OVER,
-                payload: {
-                    winner: this.board.turn() === "w" ? "black" : "white"
-                }
-            });
-            this.player1.send(gameOverPayload);
-            if (!this.isBotGame && this.player1 !== this.player2) {
-                this.player2.send(gameOverPayload);
-            }
-            return;
-        }
-
-        // tell the other side that move has been made
+        // Send move notification to opponent in 2-player games
         if (!this.isBotGame) {
             if (this.countmoves % 2 === 0) {
                 this.player2.send(JSON.stringify({
@@ -77,31 +63,48 @@ export class Game {
         }
         this.countmoves++;
 
-        // If playing against computer, trigger Stockfish move
+        // Check if game is over after player move
+        if (this.board.isGameOver()) {
+            const gameOverPayload = JSON.stringify({
+                type: GAME_OVER,
+                payload: {
+                    winner: this.board.turn() === "w" ? "black" : "white"
+                }
+            });
+            this.player1.send(gameOverPayload);
+            if (!this.isBotGame && this.player1 !== this.player2) {
+                this.player2.send(gameOverPayload);
+            }
+            return;
+        }
+
+        // If playing against bot, trigger bot response
         if (this.isBotGame && !this.board.isGameOver()) {
             await this.makeStockfishMove();
         }
     }
 
     public async makeStockfishMove() {
-        const botMove = await Stockfish.getBestMove(this.board.fen());
-        if (!botMove) return;
-
         try {
-            this.board.move(botMove);
-            this.player1.send(JSON.stringify({
-                type: MOVE,
-                payload: botMove
-            }));
-            this.countmoves++;
+            const botMove = await Stockfish.getBestMove(this.board.fen());
+            if (!botMove) return;
 
-            if (this.board.isGameOver()) {
+            const moveResult = this.board.move(botMove);
+            if (moveResult) {
                 this.player1.send(JSON.stringify({
-                    type: GAME_OVER,
-                    payload: {
-                        winner: this.board.turn() === "w" ? "black" : "white"
-                    }
+                    type: MOVE,
+                    payload: botMove
                 }));
+                this.countmoves++;
+
+                if (this.board.isGameOver()) {
+                    this.player1.send(JSON.stringify({
+                        type: GAME_OVER,
+                        payload: {
+                            winner: this.board.turn() === "w" ? "black" : "white"
+                        }
+                    }));
+                }
             }
         } catch (e) {
             console.error("Error applying Stockfish move:", e);

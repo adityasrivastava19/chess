@@ -7,11 +7,11 @@ export interface StockfishMove {
 }
 
 export class Stockfish {
-    //Get the best move from Stockfish API or fallback heuristic
+    // Get the best move from Stockfish API with fast fallback
     public static async getBestMove(fen: string, depth = 10): Promise<StockfishMove | null> {
         try {
             const url = `https://stockfish.online/api/s/v2.php?fen=${encodeURIComponent(fen)}&depth=${depth}`;
-            const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+            const response = await fetch(url, { signal: AbortSignal.timeout(1500) });
             if (!response.ok) {
                 throw new Error(`Stockfish API HTTP error: ${response.status}`);
             }
@@ -31,21 +31,20 @@ export class Stockfish {
                 }
             }
         } catch (error) {
-            console.warn("Stockfish API request failed, falling back to local engine move:", error);
+            console.warn("Stockfish API request failed or timed out, using fallback engine:", error);
         }
 
         return this.getFallbackMove(fen);
     }
 
-    
-      //Fallback move generator using legal chess moves if API fails or times out
-   
+    // Fallback move generator using legal chess moves if API fails or times out
     private static getFallbackMove(fen: string): StockfishMove | null {
         try {
             const chess = new Chess(fen);
             const moves = chess.moves({ verbose: true });
             if (moves.length === 0) return null;
 
+            // Prioritize captures and checks for a stronger bot experience
             const captureOrCheck = moves.find((m) => m.captured || m.san.includes("+"));
             const chosenMove = captureOrCheck ?? moves[Math.floor(Math.random() * moves.length)];
 
@@ -60,7 +59,8 @@ export class Stockfish {
             }
 
             return moveObj;
-        } catch {
+        } catch (e) {
+            console.error("Error generating fallback move:", e);
             return null;
         }
     }

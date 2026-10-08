@@ -1,10 +1,13 @@
  import chessBg from "../icons/background.png";
 import { Crown } from "lucide-react";
- import { Button } from "../../component/button";
+ import { Button } from "../component/button";
 import { useNavigate } from "react-router-dom";
+
  export const LandingPage=()=>
  {
   const navi=useNavigate();
+
+ 
 return (
   <div className="min-h-screen bg-center bg-cover bg-no-repeat flex justify-center items-center " style={{ backgroundImage: `url(${chessBg})` }}>
     <div>
@@ -39,12 +42,9 @@ return (
   </div>
 
 </div>
-          <div className="flex gap-2">
+          <div className="flex justify-center  mt-3">
              <div >
-            <Button variant="primary" size="lg" text="Play online"  onClick={()=>{navi("/game")}}/>
-           </div>
-           <div>
-            <Button variant="secondary" size="lg" text="Play with Computer" />
+            <Button variant="primary" size="lg" text="Play "  onClick={()=>{navi("/game")}}/>
            </div>
           </div>
           </div>
