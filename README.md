@@ -84,37 +84,5 @@ Runs on http://localhost:5173.
 
 ---
 
-## Deployment Guide
-
-### Option 1: Cloudflare Pages + Railway / Render
-
-#### 1. Deploy Frontend to Cloudflare Pages
-- Connect repository on Cloudflare Dashboard
-- Root directory: frontend
-- Build command: npm run build
-- Output directory: dist
-- Environment Variable: VITE_WS_URL = wss://your-backend.up.railway.app
-
-#### 2. Deploy Backend to Railway / Render
-- Root directory: wsbackend
-- Build command: npm run build
-- Start command: node dist/index.js
-
----
-
-### Option 2: Unified Single-Port Deployment
-
-The backend server in wsbackend/src/index.ts is configured to serve both the static frontend files from frontend/dist and WebSocket connections on a single port (process.env.PORT || 8080).
-
-```bash
-# Build both frontend and backend from root
-npm run build
-
-# Start unified production server
-npm run start
-```
-
----
-
 ## License
 MIT License
