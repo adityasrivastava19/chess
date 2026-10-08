@@ -37,21 +37,21 @@ A full-stack, real-time multiplayer chess web application built with React 19, T
 
 ```text
 chess/
-├── frontend/             # React 19 Vite Frontend Application
+├── frontend/
 │   ├── src/
-│   │   ├── component/   # ChessBoard, PieceIcons, Buttons
-│   │   ├── hooks/       # UseSocket hook
-│   │   ├── messages/    # Shared message constants
-│   │   └── pages/       # Landing & Game pages
+│   │   ├── component/
+│   │   ├── hooks/
+│   │   ├── messages/
+│   │   └── pages/
 │   └── package.json
-├── wsbackend/            # Node.js WebSocket Backend Server
+├── wsbackend/
 │   ├── src/
-│   │   ├── Game.ts      # Match game state & move handler
-│   │   ├── Maneger.ts   # User queue & room manager
-│   │   ├── Stockfish.ts # Bot AI move generator
-│   │   └── index.ts     # Unified HTTP + WS server entry point
+│   │   ├── Game.ts
+│   │   ├── Maneger.ts
+│   │   ├── Stockfish.ts
+│   │   └── index.ts
 │   └── package.json
-├── package.json          # Monorepo root scripts
+├── package.json
 └── README.md
 ```
 
@@ -61,58 +61,29 @@ chess/
 
 ### 1. Install Dependencies
 ```bash
-# Install frontend dependencies
 cd frontend && npm install
-
-# Install backend dependencies
 cd ../wsbackend && npm install
 ```
 
-### 2. Start Backend Server
+### 2. Start Unified Development Server
 ```bash
-cd wsbackend
 npm run dev
 ```
-Runs on http://localhost:8080 and ws://localhost:8080.
-
-### 3. Start Frontend Development Server
-```bash
-cd frontend
-npm run dev
-```
-Runs on http://localhost:5173.
 
 ---
 
 ## Deployment Guide
 
-### Option 1: Cloudflare Pages + Railway / Render
+### Deploying Directly on Render (Monorepo Web Service)
 
-#### 1. Deploy Frontend to Cloudflare Pages
-- Connect repository on Cloudflare Dashboard
-- Root directory: frontend
-- Build command: npm run build
-- Output directory: dist
-- Environment Variable: VITE_WS_URL = wss://your-backend.up.railway.app
+1. Create a new Web Service on Render and connect your GitHub repository.
+2. Configure settings:
+   - Environment: Node
+   - Build Command: npm run build
+   - Start Command: npm start
+3. Click Create Web Service.
 
-#### 2. Deploy Backend to Railway / Render
-- Root directory: wsbackend
-- Build command: npm run build
-- Start command: node dist/index.js
-
----
-
-### Option 2: Unified Single-Port Deployment
-
-The backend server in wsbackend/src/index.ts is configured to serve both the static frontend files from frontend/dist and WebSocket connections on a single port (process.env.PORT || 8080).
-
-```bash
-# Build both frontend and backend from root
-npm run build
-
-# Start unified production server
-npm run start
-```
+Render will automatically build your React frontend, compile your TypeScript backend, and serve both the web application and WebSocket server from your Render URL.
 
 ---
 
